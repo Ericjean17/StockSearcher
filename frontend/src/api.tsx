@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { CompanySearch } from "./company";
 
 interface SearchResponse {
@@ -6,19 +7,11 @@ interface SearchResponse {
 
 export const searchCompanies = async (query: string) => {
   try {
-    const response = await fetch(
-      `https://financialmodelingprep.com/stable/search-symbol?query=${query}&apikey=${import.meta.env.VITE_MY_API_KEY}`,
-    {
-      method: "GET"
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: SearchResponse = await response.json();
+    const data = await axios.get<SearchResponse>(
+      `https://financialmodelingprep.com/stable/search-symbol?query=${query}&apikey=${import.meta.env.VITE_MY_API_KEY}`
+    );
     return data;
   } catch (error) {
-    console.log("error message", error);
-    throw error;
+    return error instanceof Error ? error.message : "An error occurred";
   }
 }

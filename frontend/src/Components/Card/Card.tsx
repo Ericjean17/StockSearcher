@@ -1,25 +1,29 @@
-import React, { type JSX } from 'react'
+import React, { type JSX, type SyntheticEvent } from 'react'
 import "./Card.css"
+import type { CompanySearch } from '../../company';
+import AddPortfolio from '../Portfolio/AddPortfolio';
 
 // Defines the props that the Card component expects to receive
 interface Props {
-  companyName: string;
-  ticker: string;
-  price: number;
+  id: string;
+  searchResult: CompanySearch;
+  onPortfolioCreate: (e: SyntheticEvent) => void;
 }
 
-const Card = ({companyName, ticker, price}: Props) => {
+const Card = ({ id, searchResult, onPortfolioCreate }: Props) => {
   return (
     <div className='card'>
       <img 
-        src="https://hips.hearstapps.com/hmg-prod/images/2025-tesla-model-s-1-672d42e172407.jpg?crop=0.465xw:0.466xh;0.285xw,0.361xh&resize=1200:*" 
-        alt="Image" 
+        alt="company logo" 
       />
       <div className="details">
-        <h2>{companyName} ({ticker})</h2>
-        <p>${price}</p>
+        <h2>{searchResult.name} ({searchResult.symbol})</h2>
+        <p>{searchResult.currency}</p>
       </div>
-      <p className="infon">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, quasi.</p>
+      <p className="info">
+        {searchResult.exchange} - {searchResult.exchangeFullName}
+      </p>
+      <AddPortfolio onPortfolioCreate={onPortfolioCreate} symbol={searchResult.symbol}/>
     </div>
   )
 }
